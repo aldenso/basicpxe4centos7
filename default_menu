@@ -1,0 +1,24 @@
+default menu.c32
+prompt 0
+timeout 120
+
+display boot.msg
+
+label linux
+  menu label ^Install system
+  menu default
+  kernel vmlinuz
+  append initrd=initrd.img ip=dhcp inst.repo=http://192.168.100.1/centos7
+
+label rescue
+  menu label ^Rescue installed system
+  kernel vmlinuz
+  append initrd=initrd.img rescue
+label local
+  menu label Boot from ^local drive
+  localboot 0xffff
+
+#label node1
+#  menu label Install system node1 
+#  kernel vmlinuz
+#  append initrd=initrd.img ip=dhcp nomodeset inst.repo=http://192.168.100.1/centos7 inst.ks=http://192.168.100.1/kickstart/ks_default.cfg
