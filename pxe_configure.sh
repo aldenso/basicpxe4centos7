@@ -3,10 +3,23 @@
 # @Date:   2016-08-29T23:38:02-04:00
 # @Email:  aldenso@gmail.com
 # @Last modified by:   Aldo Sotolongo
-# @Last modified time: 2016-09-01T14:44:56-04:00
+# @Last modified time: 2016-09-01T19:38:48-04:00
 # FILE: pxe_configure.sh
 # DESCRIPTION: Script to automate a basic centos7 pxe
 # REQUIREMENTS: centos7 OS, centos install image in $IMAGEDIR dir.
+
+##############################
+# Check Privileges
+##############################
+USER=$(id -u)
+if [ "$USER" -eq 0 ]
+then
+    echo "###############################"
+	echo "OK: running with root privileges"
+else
+    echo "you are not root or have root privileges with sudo!"
+	exit 1
+fi
 
 ##############################
 # Configuration
@@ -27,7 +40,7 @@ SYSLINUXDIR="/usr/share/syslinux"
 
 if ( [ -d "$IMAGEDIR" ] && [ -d "$IMAGEPXE" ] )
 then
-	echo "$IMAGEDIR and $IMAGEPXE exist"
+	echo "OK: $IMAGEDIR and $IMAGEPXE exist"
 else
 	echo "Make sure IMAGEDIR and IMAGEPXE exist and are properly configured.
 IMAGEDIR: $IMAGEDIR
@@ -40,10 +53,12 @@ fi
 # Install packages.
 ##############################
 packages="dhcp syslinux tftp-server httpd xinetd"
+echo "###############################"
+echo "Installing packages $packages"
 yum install -y $packages > /dev/null 2>&1
 if [ $? -eq 0 ]
 then
-	echo "Packages $packages installed successfully"
+	echo "Packages installed successfully"
 else
 	echo "Failed to install Packages."
 	exit 1
@@ -79,6 +94,7 @@ DHCP RANGE: $DHCPRANGEFIRSTIP - $DHCPRANGELASTIP
 # update syslinux menu
 ##############################
 sed -e "s|inst.repo=http://192.168.100.1|inst.repo=http://$DHCPSERVER|g" default_menu > default_menu-final
+sed -ie "s|inst.ks=http://192.168.100.1|inst.ks=http://$DHCPSERVER|g" default_menu-final
 
 ##############################
 # copy syslinux templates
