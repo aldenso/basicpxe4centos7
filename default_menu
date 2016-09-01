@@ -19,6 +19,6 @@ label local
   localboot 0xffff
 
 #label node1
-#  menu label Install system node1 
+#  menu label Install system node1
 #  kernel vmlinuz
 #  append initrd=initrd.img ip=dhcp nomodeset inst.repo=http://192.168.100.1/centos7 inst.ks=http://192.168.100.1/kickstart/ks_default.cfg
