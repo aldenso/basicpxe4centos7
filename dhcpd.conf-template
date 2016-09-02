@@ -21,3 +21,9 @@ subnet 192.168.100.0 netmask 255.255.255.0 {
   next-server 192.168.100.1;
   filename "pxelinux.0";
 }
+
+#host node1 {
+#  hardware ethernet 08:00:27:C1:C1:DE;
+#  fixed-address 192.168.100.201;
+#  option host-name "node1";
+#}
